@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useForm } from "react-hook-form";
+import { useState } from 'react';
+import { Form, Button, FormGroup } from 'react-bootstrap';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useForm } from 'react-hook-form';
+import { getAllCategories } from '../../redux/categoriesRedux';
+import { useSelector } from 'react-redux';
 
 const PostForm = ({ action, actionText, ...props }) => {
 
@@ -16,15 +18,21 @@ const PostForm = ({ action, actionText, ...props }) => {
   const [shortDescription, setShortDescription] = useState(props.shortDescription || '');
 	const [content, setContent] = useState(props.content || '');
 	const [contentError, setContentError] = useState(false);
-  const [dateError, setDateError] = useState(false);
+	const [dateError, setDateError] = useState(false);
+	const [category, setCategory] = useState(props.category || '');
+	const [categoryError, setCategoryError] = useState(false);
+
+
+	const categories = useSelector(getAllCategories);
 
 	const handleSubmit = e => {
 		 //mozna zrezygnowac z e.preventDefault() bo robi to juz funkcja validate
     //e.preventDefault();
    setContentError(!content)
-   setDateError(!publishedDate)
+		setDateError(!publishedDate)
+		setCategoryError(!category)
    if(content && publishedDate) { 
-     action({ title, author, publishedDate, shortDescription, content });
+     action({ title, author, publishedDate, shortDescription, content, category });
    }
  };
   
@@ -76,6 +84,29 @@ const PostForm = ({ action, actionText, ...props }) => {
 				)}
 			</Form.Group>
 
+			<FormGroup className="mb-3" controlId="formCategory">
+				<Form.Label>Category</Form.Label>
+				<Form.Select
+					{...register("category", { required: true })}
+					value={category}
+					onChange={(e) => setCategory(e.target.value)}
+				>
+					<option key="blankChoice" hidden value>
+						Select category...
+					</option>
+					{categories.map((category) => (
+						<option key={category.id} value={category.name}>
+							{category.name}
+						</option>
+					))}
+				</Form.Select>
+				{categoryError && (
+					<small className="d-block form-text text-danger mt-2">
+						Category can't be empty
+					</small>
+				)}
+			</FormGroup>
+
 			<Form.Group className="mb-3" controlId="formShordDescription">
 				<Form.Label>Short description</Form.Label>
 				<Form.Control
@@ -95,11 +126,7 @@ const PostForm = ({ action, actionText, ...props }) => {
 
 			<Form.Group className="mb-3" controlId="formMainContent">
 				<Form.Label>Main content</Form.Label>
-				<ReactQuill
-					theme="snow"
-					value={content}
-					onChange={setContent}
-				/>
+				<ReactQuill theme="snow" value={content} onChange={setContent} />
 				{contentError && (
 					<small className="d-block form-text text-danger mt-2">
 						Content can't be empty
