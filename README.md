@@ -1,6 +1,6 @@
 # Blog
 
-Aplikacja bloga typu CRUD wykonana przy pomocy React, wersja demo [Blog](https://shrouded-falls-63468.herokuapp.com)
+Aplikacja bloga typu CRUD wykonana z użyciem React, Redux. Wersja demo [Blog](https://shrouded-falls-63468.herokuapp.com)
 <br />
 <br />
 # Getting Started with Create React App
