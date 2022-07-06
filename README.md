@@ -1,3 +1,8 @@
+# Blog
+
+Aplikacja bloga typu CRUD wykonana przy pomocy React, wersja demo [Blog](https://shrouded-falls-63468.herokuapp.com)
+<br />
+<br />
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
